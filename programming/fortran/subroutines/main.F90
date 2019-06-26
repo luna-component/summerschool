@@ -1,6 +1,8 @@
 program subroutines
   use laplacian_mod
   implicit none
+
+  real(dp), dimension(:,:), allocatable :: previous, current
   ! TODO: define the arrays
   integer :: nx, ny
 

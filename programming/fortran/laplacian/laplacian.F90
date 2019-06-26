@@ -38,7 +38,7 @@ program laplacian
   L = 0.0
   do i = 2, ny-1
      !x = 0.0
-     do j = 1, i-1
+     do j = 2, nx-1
         L(i,j) = ( A(i-1, j) - 2.0*( A(i,j)  ) + A(i+1, j) ) / (dx**2) &
             + ( A(i, j-1) - 2.0*( A(i,j)  ) + A(i, j+1) ) / (dy**2)
      end do
@@ -49,14 +49,16 @@ program laplacian
   write(*,*) "Original array:"
   do i = 2, nx-1
     print *, 'row', i
-    print *, A(i, 2:nx-1)
+    write(*, '(ES10.4)') A(i, 2:nx-1)
+    !write(*, '(12F6.2)') A(i, 2:nx-1)
   end do
   
 
   write(*,*) "Laplacian of the array:"
   do i = 2, nx-1
     print *, 'row', i
-    print *, L(i, 2:nx-1)
+    write(*, '(ES10.4)') L(i, 2:nx-1)
+    !write(*, '(12F6.2)') L(i, 2:nx-1)
   end do
 
   !write(*,*) 'Shape of L:', shape(L)
