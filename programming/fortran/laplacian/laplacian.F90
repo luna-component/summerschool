@@ -49,7 +49,7 @@ program laplacian
   write(*,*) "Original array:"
   do i = 2, nx-1
     print *, 'row', i
-    write(*, '(ES10.4)') A(i, 2:nx-1)
+    write(*, '(*(ES12.4))') A(i, 2:nx-1)
     !write(*, '(12F6.2)') A(i, 2:nx-1)
   end do
   
@@ -57,7 +57,7 @@ program laplacian
   write(*,*) "Laplacian of the array:"
   do i = 2, nx-1
     print *, 'row', i
-    write(*, '(ES10.4)') L(i, 2:nx-1)
+    write(*, '(*(ES12.4))') L(i, 2:nx-1)
     !write(*, '(12F6.2)') L(i, 2:nx-1)
   end do
 
