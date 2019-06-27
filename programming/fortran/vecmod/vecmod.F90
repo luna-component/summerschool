@@ -21,9 +21,9 @@ module vector_algebra
       module procedure v_dot
   end interface operator(*)
 
-!  interface (.x.)
-!      module procedure v_cross
-!  end interface (.x.)
+  interface operator(.x.)
+      module procedure v_cross
+  end interface operator(.x.)
 
   contains
   
@@ -68,13 +68,13 @@ module vector_algebra
     end function v_dot
 
 
-!    function v_cross(v1, v2) result(v3)
-!        type(vector_t), intent(in) :: v1, v2
-!        type(vector_t) :: v3
-!  
-!        v3%x = (v1%y*v2%z - v1%z*v2%y) 
-!        v3%y = (v1%z*v2%x - v1%x*v2%z)
-!        v3%z = (v1%x*v2%y - v1%y*v2%x)
-!    end function v_cross
+    function v_cross(v1, v2) result(v3)
+        type(vector_t), intent(in) :: v1, v2
+        type(vector_t) :: v3
+  
+        v3%x = (v1%y*v2%z - v1%z*v2%y) 
+        v3%y = (v1%z*v2%x - v1%x*v2%z)
+        v3%z = (v1%x*v2%y - v1%y*v2%x)
+    end function v_cross
 
 end module vector_algebra
