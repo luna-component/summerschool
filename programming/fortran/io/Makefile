@@ -1,8 +1,8 @@
 ifeq ($(COMP),)
-COMP=cray
+COMP=gnu
 endif
 
-COMMONDIR=../../../../heat/common
+COMMONDIR=../../../heat/common
 LIBPNGDIR=/appl/opt/libpng
 
 ifeq ($(COMP),cray)
@@ -17,6 +17,7 @@ endif
 ifeq ($(COMP),gnu)
 FC=gfortran
 CC=gcc
+LIBPNGDIR=/usr/local/
 FCFLAGS=-O3 -Wall 
 CCFLAGS=-O3 -Wall -I$(LIBPNGDIR)/include -I$(COMMONDIR)
 LDFLAGS=-L$(LIBPNGDIR)/lib

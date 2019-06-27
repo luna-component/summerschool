@@ -8,28 +8,22 @@ contains
 
     real, dimension(:,:), allocatable, intent(out) :: field
     character(len=*), intent(in) :: filename
+    integer :: nx, ny, i 
+    
+    !open file and read the first line to read the dimensions (integers nx, ny)
+    open(11, file=filename, status='old')
+    read(11, fmt='(1x2i4)') nx, ny
+   
+    ! allocalte the matrix the values will be written in 
+    allocate(field(nx,ny))
+    
+    ! initiate the matrix, each line contains nx elements, they're written in a column of matrix
+    field = 0.0
+    do i= 1, ny
+        read(11, *) field(i, :)
+    end do
 
-    ! TODO: implement function that will:
-    ! open the file
-    ! read the first header line to get nx and ny
-    ! allocate matrix called field
-    ! read rest of the file into field
-    ! close the file
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    close(unit=11, status='keep')
 
 
   end subroutine read_field
