@@ -50,7 +50,6 @@ contains
     integer :: nx, ny, i
     character(len=2) :: dummy
 
-    ! TODO: implement the file reading
     ! Read the header
 
     ! Initialize the field metadata (nx, ny, dx, dy). You can use
@@ -59,13 +58,21 @@ contains
     ! Allocate space for the data. The array for temperature field contains 
     ! also a halo region (one layer of extra space in all directions which
     ! is used as boundary condition).
+    open(11, file=filename, status='old')
+    read(11, fmt='(1x2i4)') dummy, nx, ny
 
+    call set_field_dimensions(field0, nx, ny)
 
-
+    ! 0 to n+1 so that it has boundaries
+    allocate(field0%data(0:field0%nx+1, 0:field0%ny+1))
+    
     ! Read the data
+    !field0%data = 0.0
+    do i= 1, ny
+        read(11, *) field0%data(i, 1:ny)
+    end do
 
-
-    ! TODO end
+    close(unit=11, status='keep')
 
     ! Set the boundary values
     field0%data(1:nx,   0     ) = field0%data(1:nx, 1     )

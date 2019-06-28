@@ -13,11 +13,15 @@ program exchange
 
   message = myid
 
-  ! TODO: Implement sending and receiving as defined in the assignment
   if (myid == 0) then
+     call mpi_send(message, msgsize, MPI_INTEGER, myid+1, 2, MPI_COMM_WORLD, rc)
+     call mpi_recv(receiveBuffer, msgsize, MPI_INTEGER, myid+1, MPI_ANY_TAG, MPI_COMM_WORLD, status, rc)
      write(*,'(A10,I3,A10,I3)') 'Rank: ', myid, &
           ' received ', receiveBuffer(1)
+
   else if (myid == 1) then
+     call mpi_recv(receiveBuffer, msgsize, MPI_INTEGER, myid-1, MPI_ANY_TAG, MPI_COMM_WORLD, status, rc)
+     call mpi_send(message, msgsize, MPI_INTEGER, myid-1, 3, MPI_COMM_WORLD, rc)
      write(*,'(A10,I3,A10,I3)') 'Rank: ', myid, &
           ' received ', receiveBuffer(1)
   end if
