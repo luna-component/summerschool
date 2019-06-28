@@ -32,6 +32,7 @@ program coll_exer
   do i = 2, ntasks
      offsets(i) = offsets(i-1) + counts(i-1)
   end do
+
   call mpi_gatherv(sendbuf, counts(rank+1), MPI_INTEGER, recvbuf, counts, &
        & offsets, MPI_INTEGER, 1, MPI_COMM_WORLD, ierr)
 

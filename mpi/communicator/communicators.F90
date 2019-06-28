@@ -4,10 +4,11 @@ program coll_exer
 
   integer, parameter :: n_mpi_tasks = 4
 
-  integer :: ntasks, rank, ierr
+  integer :: ntasks, rank, ierr, color, nntasks, nrank
   integer, dimension(2*n_mpi_tasks) :: sendbuf, recvbuf
   integer, dimension(2*n_mpi_tasks**2) :: printbuf
-  integer, dimension(n_mpi_tasks) :: scount, displs
+!  integer, dimension(n_mpi_tasks) :: scount, displs
+  type(mpi_comm) :: newcomm0
 
   call mpi_init(ierr)
   call mpi_comm_size(MPI_COMM_WORLD, ntasks, ierr)
@@ -26,26 +27,23 @@ program coll_exer
   ! Print data that will be sent
   call print_buffers(sendbuf)
 
-  ! part a
-!  call mpi_bcast(sendbuf, 2*n_mpi_tasks, MPI_INTEGER, 0, MPI_COMM_WORLD, ierr)
-!  call print_buffers(sendbuf)
+  ! assign color to each process
+  if (rank < 2) then
+      color = 1 
+  else
+      color = 2
+  end if
+  
+  ! split the world communicator into two new comms, processes get assigned due to color
+  call mpi_comm_split(MPI_COMM_WORLD, color, rank, newcomm0, ierr)
+  call mpi_comm_rank(newcomm0, nrank, ierr)
+  write (*,*) 'Rank', rank,  'in MY_COMM_WORLD, but ', nrank, 'in ', color,  'in newcomm0. '
 
-!  ! part b
-!  call mpi_scatter(sendbuf, 2, MPI_INTEGER, recvbuf, 2, MPI_INTEGER, 0, MPI_COMM_WORLD, ierr)
-!  call print_buffers(recvbuf)
-
-!  ! part c
-!  scount = (/1, 1, 2, 4/)
-!  displs = (/0, 1, 2, 4/)
-!  ! scount(rank+1) since rank starts at 0 and array elements at 1
-!  call mpi_gatherv(sendbuf, scount(rank+1), MPI_INTEGER, recvbuf, scount, displs, MPI_INTEGER, 1, MPI_COMM_WORLD, ierr )
-!  call print_buffers(recvbuf)
-
-  ! part d
-  call mpi_alltoall(sendbuf, 2, MPI_INTEGER, recvbuf, 2, MPI_INTEGER, MPI_COMM_WORLD)
+  ! excercise done here
+  call mpi_reduce(sendbuf, recvbuf, 2*n_mpi_tasks, MPI_INTEGER, MPI_SUM, 0, newcomm0)
   call print_buffers(recvbuf)
-  
-  
+
+
   call mpi_finalize(ierr)
 
 contains

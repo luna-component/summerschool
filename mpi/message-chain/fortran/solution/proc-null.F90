@@ -3,7 +3,7 @@ program basic
   use iso_fortran_env, only : REAL64
 
   implicit none
-  integer, parameter :: msgsize = 10000000
+  integer, parameter :: msgsize = 1000
   integer :: rc, myid, ntasks
   integer :: message(msgsize)
   integer :: receiveBuffer(msgsize)
