@@ -5,8 +5,13 @@ program coll_exer
   integer, parameter :: n_mpi_tasks = 4
 
   integer :: ntasks, rank, ierr, i, color, sub_comm
+  integer :: source, destination
   integer, dimension(2*n_mpi_tasks) :: sendbuf, recvbuf
   integer, dimension(2*n_mpi_tasks**2) :: printbuf
+  integer, dimension(n_mpi_tasks) :: scount, displs
+  type(mpi_request) :: request
+  type(mpi_request) :: requests(2)
+  type(mpi_status) :: status
 
   call mpi_init(ierr)
   call mpi_comm_size(MPI_COMM_WORLD, ntasks, ierr)
@@ -29,10 +34,33 @@ program coll_exer
   ! collective communication call (and maybe prepare
   ! some parameters for the call)
   ! TODO: remember to complete the collective
-
   ! Print data that was received
   ! TODO: add correct buffer
-  call print_buffers(...)
+
+!  ! d part of coll
+!  call mpi_ialltoall(sendbuf, 2, MPI_INTEGER, recvbuf, 2, MPI_INTEGER, MPI_COMM_WORLD, request, ierr)  
+!  call mpi_wait(request, status, ierr) 
+!  call print_buffers(recvbuf)
+
+!  ! c part of coll
+!  scount = (/1, 1, 2, 4/)
+!  displs = (/0, 1, 2, 4/)
+!  ! scount(rank+1) since rank starts at 0 and array elements at 1
+!  call mpi_igatherv(sendbuf, scount(rank+1), MPI_INTEGER, recvbuf, scount, displs,&
+!      MPI_INTEGER, 1, MPI_COMM_WORLD, request, ierr )
+!  call mpi_wait(request, status, ierr)
+!  call print_buffers(recvbuf)
+   
+!   ! b part of coll
+!   call mpi_iscatter(sendbuf, 2, MPI_INTEGER, recvbuf, 2, MPI_INTEGER, 0, MPI_COMM_WORLD, request, ierr)
+!   call mpi_wait(request, status, ierr)
+!   call print_buffers(recvbuf)
+
+!    ! a part of coll
+!    call mpi_ibcast(sendbuf, 2*ntasks, MPI_INTEGER, 0, MPI_COMM_WORLD, request, ierr)
+!    call mpi_wait(request, status, ierr)
+!    call print_buffers(sendbuf)
+
 
   call mpi_finalize(ierr)
 

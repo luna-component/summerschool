@@ -27,8 +27,8 @@ program coll_exer
   call print_buffers(sendbuf)
 
   ! part a
-!  call mpi_bcast(sendbuf, 2*n_mpi_tasks, MPI_INTEGER, 0, MPI_COMM_WORLD, ierr)
-!  call print_buffers(sendbuf)
+  call mpi_bcast(sendbuf, 2*ntasks, MPI_INTEGER, 0, MPI_COMM_WORLD, ierr)
+  call print_buffers(sendbuf)
 
 !  ! part b
 !  call mpi_scatter(sendbuf, 2, MPI_INTEGER, recvbuf, 2, MPI_INTEGER, 0, MPI_COMM_WORLD, ierr)
@@ -41,9 +41,9 @@ program coll_exer
 !  call mpi_gatherv(sendbuf, scount(rank+1), MPI_INTEGER, recvbuf, scount, displs, MPI_INTEGER, 1, MPI_COMM_WORLD, ierr )
 !  call print_buffers(recvbuf)
 
-  ! part d
-  call mpi_alltoall(sendbuf, 2, MPI_INTEGER, recvbuf, 2, MPI_INTEGER, MPI_COMM_WORLD)
-  call print_buffers(recvbuf)
+!  ! part d
+!  call mpi_alltoall(sendbuf, 2, MPI_INTEGER, recvbuf, 2, MPI_INTEGER, MPI_COMM_WORLD)
+!  call print_buffers(recvbuf)
   
   
   call mpi_finalize(ierr)

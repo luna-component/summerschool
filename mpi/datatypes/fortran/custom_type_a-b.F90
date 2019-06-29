@@ -55,9 +55,11 @@ program datatype1
   ! part b, evt displs use size of dim2+blocklens  element
   blocklens = (/1, 2, 3, 4/)
   displs = (/0, 17, 34, 51/)
+  ! sending 4 blocks of diff size
   call mpi_type_indexed(4, blocklens, displs, MPI_INTEGER, blockstype, ierr)
   call mpi_type_commit(blockstype, ierr)
 
+  ! here sending 1 block of type blockstype
   if (rank == 0) then
       call mpi_send(array(1,1), 1, blockstype, 2, 2, MPI_COMM_WORLD, ierr)
   else if (rank == 2) then
