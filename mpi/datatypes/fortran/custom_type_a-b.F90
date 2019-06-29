@@ -3,9 +3,12 @@ program datatype1
   implicit none
 
   integer, dimension(8,8) :: array
+  integer, dimension(4) :: blocklens, displs
   integer :: rank, ierr
   !TODO: declare variable for datatype
+  type(mpi_datatype) :: rowtype, blockstype
   integer :: i, j
+  type(mpi_status) :: status
 
   call mpi_init(ierr)
   call mpi_comm_rank(MPI_COMM_WORLD, rank ,ierr)
@@ -28,20 +31,47 @@ program datatype1
      end do
   end if
 
+!  ! part a
+!  !TODO: create datatype describing one row, use mpi_type_vector
+!   call mpi_type_vector(8, 1, 8, MPI_INTEGER, rowtype, ierr)
+!   call mpi_type_commit(rowtype, ierr)
+!  !TODO: send first row of matrix from rank 0 to 1
+!   if (rank == 0) then   
+!      call mpi_send(array(2,1), 1, rowtype, 1, 1, MPI_COMM_WORLD, ierr)
+!   else if (rank == 1) then 
+!      call mpi_recv(array(2,1), 1, rowtype, 0, 1, MPI_COMM_WORLD, status, ierr)
+!   end if 
+!  ! Print out the result
+!  if (rank == 1) then
+!     write(*,*) 'Received data'
+!     do i=1,8
+!        write(*,'(8I3)') array(i, :)
+!     end do
+!  end if
+!
+!  !TODO free datatype
+!  call mpi_type_free(rowtype, ierr)
 
-  !TODO: create datatype describing one row, use mpi_type_vector
+  ! part b, evt displs use size of dim2+blocklens  element
+  blocklens = (/1, 2, 3, 4/)
+  displs = (/0, 17, 34, 51/)
+  call mpi_type_indexed(4, blocklens, displs, MPI_INTEGER, blockstype, ierr)
+  call mpi_type_commit(blockstype, ierr)
 
-  !TODO: send first row of matrix from rank 0 to 1
-
+  if (rank == 0) then
+      call mpi_send(array(1,1), 1, blockstype, 2, 2, MPI_COMM_WORLD, ierr)
+  else if (rank == 2) then
+      call mpi_recv(array(1,1), 1, blockstype, 0, 2, MPI_COMM_WORLD, status, ierr)
+  end if
   ! Print out the result
-  if (rank == 1) then
+  if (rank == 2) then
      write(*,*) 'Received data'
      do i=1,8
         write(*,'(8I3)') array(i, :)
      end do
   end if
 
-  !TODO free datatype
+  call mpi_type_free(blockstype, ierr)
 
   call mpi_finalize(ierr)
 
